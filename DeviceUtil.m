@@ -128,6 +128,10 @@
   //log message that your device is not present in the list
   [self logMessage:hardware];
   
+  if ([hardware hasPrefix:@"iPhone"])          return UNKNOWN_IPHONE;
+  if ([hardware hasPrefix:@"iPod"])            return UNKNOWN_IPOD;
+  if ([hardware hasPrefix:@"iPad"])            return UNKNOWN_IPAD;
+  
   return NOT_AVAILABLE;
 }
 
@@ -226,6 +230,39 @@
       break;
   }
   return CGSizeZero;
+}
+
++ (BOOL)isBlurAvailable {
+  // Blur is not available pre-iOS 8
+  if([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending) {
+    return FALSE;
+  }
+  
+  // Check for 'reduce transparency'. This function only exists on iOS 8
+  // but we already checked that we are at least on iOS 8
+  if (UIAccessibilityIsReduceTransparencyEnabled()) {
+    return FALSE;
+  }
+
+  // mentioned in wwdc: http://asciiwwdc.com/2014/sessions/419
+  NSSet *unsupportedDevices = [NSSet setWithObjects:
+                               @(IPAD), @(IPAD_3G),
+                               @(IPAD_2_WIFI), @(IPAD_2), @(IPAD_2_CDMA),
+                               @(IPAD_3_WIFI), @(IPAD_3), @(IPAD_3_WIFI_CDMA),
+                               @(IPHONE_2G), @(IPHONE_3G), @(IPHONE_3GS), @(IPHONE_4), @(IPHONE_4_CDMA),
+                               @(IPOD_TOUCH_1G), @(IPOD_TOUCH_2G), @(IPOD_TOUCH_3G), @(IPOD_TOUCH_4G), nil];
+
+  
+  if ([unsupportedDevices containsObject: @([[self class] hardware])]) {
+    // Device with poor graphics, blur not supported
+    return FALSE;
+  } else {
+    // Blur supported
+    return TRUE;
+  }
+
+  // Blur is available and enabled!
+  return TRUE;
 }
 
 + (void)logMessage:(NSString *)hardware {

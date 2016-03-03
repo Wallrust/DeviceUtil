@@ -72,7 +72,11 @@ typedef NS_ENUM(NSUInteger, Hardware) {
   IPAD_PRO_WIFI,
   IPAD_PRO_WIFI_CELLULAR,
 
-  SIMULATOR
+  SIMULATOR,
+  
+  UNKNOWN_IPHONE,
+  UNKNOWN_IPOD,
+  UNKNOWN_IPAD
 };
 
 /**
@@ -159,5 +163,7 @@ static NSString* const x86_64_Sim  = @"x86_64";
 /** This method returns the resolution for still image that can be received
  from back camera of the current device. Resolution returned for image oriented landscape right. **/
 + (CGSize)backCameraStillImageResolutionInPixels;
+
++ (BOOL)isBlurAvailable;
 
 @end
