@@ -128,6 +128,10 @@
   //log message that your device is not present in the list
   [self logMessage:hardware];
   
+  if ([hardware hasPrefix:@"iPhone"])          return UNKNOWN_IPHONE;
+  if ([hardware hasPrefix:@"iPod"])            return UNKNOWN_IPOD;
+  if ([hardware hasPrefix:@"iPad"])            return UNKNOWN_IPAD;
+  
   return NOT_AVAILABLE;
 }
 
