@@ -160,4 +160,6 @@ static NSString* const x86_64_Sim  = @"x86_64";
  from back camera of the current device. Resolution returned for image oriented landscape right. **/
 + (CGSize)backCameraStillImageResolutionInPixels;
 
++ (BOOL)isBlurAvailable;
+
 @end
